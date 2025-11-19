@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>disable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
@@ -15,6 +15,7 @@
     <RepositoryUrl>https://github.com/san40-u5an40/NuGet.ConsoleDisplayFramework</RepositoryUrl>
     <PackageOutputPath>..\..\_Releases</PackageOutputPath>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <Version>1.0.1</Version>
   </PropertyGroup>
 	
   <PropertyGroup Condition="'$(OS)' == 'Windows_NT'">
