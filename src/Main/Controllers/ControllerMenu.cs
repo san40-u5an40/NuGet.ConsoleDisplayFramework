@@ -83,7 +83,7 @@ public class ControllerMenu : IControllable<int>
         foreach (var item in menuItems)
         {
             if (item.Key == currentMenuItem)
-                ConsoleExtension.WriteColor(item.Key + ") " + item.Value + " ←\n", ConsoleColor.DarkRed);
+                Console.WriteColor(item.Key + ") " + item.Value + " ←\n", ConsoleColor.DarkRed);
             else
                 Console.WriteLine(item.Key + ") " + item.Value);
         }
