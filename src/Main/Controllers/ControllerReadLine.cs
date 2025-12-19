@@ -6,9 +6,10 @@
 public class ControllerReadLine : IControllable<string>
 {
     private string menuMessage;
+
+    private char[] currentInput = new char[0];
     private bool isExit = false;
 
-    private StringBuilder currentInput = new();
     private bool isShowText;
 
     /// <summary>
@@ -18,16 +19,9 @@ public class ControllerReadLine : IControllable<string>
     /// Подпись для ввода данных<br>
     /// Например <example>"Введите данные: "</example>
     /// </param>
-    /// <param name="isShowText">Индикатор того, необходимо ли отображать вводимый данные</param>
-    public ControllerReadLine(string message, bool isShowText = false)
-    {
-        if (string.IsNullOrWhiteSpace(message))
-            menuMessage = "Введите данные: ";
-        else
-            menuMessage = message;
-
-        this.isShowText = isShowText;
-    }
+    /// <param name="isShowText">Индикатор того, необходимо ли отображать вводимые данные</param>
+    public ControllerReadLine(string? message = null, bool isShowInput = false) =>
+        (this.menuMessage, this.isShowText) = (message ?? "Введите данные: ", isShowInput);
 
     /// <summary>
     /// Значение отражающее прекратил ли свою работу контроллер
@@ -37,20 +31,19 @@ public class ControllerReadLine : IControllable<string>
     /// <summary>
     /// Значение, хранимое контроллером
     /// </summary>
-    public string ControlValue => currentInput.ToString();
+    public string ControlValue => new string(currentInput);
 
-    /// <summary>
-    /// Вывод контроллера в консоль
-    /// </summary>
-    public void Print() =>
-        Console.WriteLine(menuMessage + (isShowText ? currentInput.ToString() : string.Empty));
+    // Метод вывода данных контроллера в консоль
+    void IPrintable.Print() =>
+        Console.WriteLine(menuMessage + (isShowText ? new string(currentInput) : string.Empty));
 
-    /// <summary>
-    /// Метод, запускающий ввод данных контроллером
-    /// </summary>
-    public void StartControl()
+    // Метод управления контроллером из консоли
+    void IControllable<string>.StartControl()
     {
         isExit = false;
+
+        currentInput = new char[128];
+        int currentPosition = 0;
 
         while (!isExit)
         {
@@ -64,16 +57,25 @@ public class ControllerReadLine : IControllable<string>
 
             if (key.Key == ConsoleKey.Delete || key.Key == ConsoleKey.Backspace)
             {
-                var temp = new StringBuilder();
-
-                for (int i = 0; i < currentInput.Length - 1; i++)
-                    temp.Append(currentInput[i]);
-
-                currentInput = temp;
+                if (currentPosition > 0)
+                    currentInput[currentPosition--] = '\0';
                 continue;
             }
 
-            currentInput.Append(key.KeyChar);
+            if(currentPosition >= currentInput.Length)
+                IncreaseArray(ref currentInput);
+
+            currentInput[currentPosition++] = key.KeyChar;
+        }
+
+        // Локальная функция увеличения размера массива символов
+        static void IncreaseArray(ref char[] arr)
+        {
+            char[] temp = arr;
+
+            arr = new char[arr.Length + 128];
+            for (int i = 0; i < temp.Length && temp[i] != '\0'; i++)
+                arr[i] = temp[i];
         }
     }
 }

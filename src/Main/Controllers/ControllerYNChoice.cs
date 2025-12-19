@@ -5,7 +5,7 @@
 /// </summary>
 public class ControllerYNChoice : IControllable<bool>
 {
-    private string? menuMessage = null;
+    private string menuMessage;
     private bool isExit = false;
 
     private bool choice = false;
@@ -15,7 +15,7 @@ public class ControllerYNChoice : IControllable<bool>
     /// </summary>
     /// <param name="menuMessage">Сообщение для отображения над контроллером</param>
     public ControllerYNChoice(string? menuMessage = null) =>
-        this.menuMessage = menuMessage ?? "Подтвердите выбор: ([Y]/[N])";
+        this.menuMessage = menuMessage ?? "Подтвердите выбор: ([Y] - yes /[N] - no)";
 
     /// <summary>
     /// Значение отражающее прекратил ли свою работу контроллер
@@ -27,16 +27,12 @@ public class ControllerYNChoice : IControllable<bool>
     /// </summary>
     public bool ControlValue => choice;
 
-    /// <summary>
-    /// Вывод контроллера в консоль
-    /// </summary>
-    public void Print() =>
+    // Метод вывода данных контроллера в консоль
+    void IPrintable.Print() =>
         Console.WriteLine(menuMessage);
 
-    /// <summary>
-    /// Метод, запускающий ввод данных контроллером
-    /// </summary>
-    public void StartControl()
+    // Метод управления контроллером из консоли
+    void IControllable<bool>.StartControl()
     {
         isExit = false;
 

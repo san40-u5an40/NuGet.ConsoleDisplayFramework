@@ -3,85 +3,102 @@
 /// <summary>
 /// Класс для асинхронного вывода дисплея и осуществления ввода данных с помощью указанного контроллера
 /// </summary>
-/// <typeparam name="T">Тип возвращаемых данных из контроллера</typeparam>
-public class Printer<T>
+public class Printer
 {
-    private IPrintable upperDisplay;
-    private IControllable<T> controlPanel;
-    private bool isUpdateInput;             // Указывает на то, необходимо ли обновлять дисплей при изменении данных ввода, хранимых в контроллере
+    private UpperDisplay upperDisplay;
 
     /// <summary>
-    /// Конструктор для создания экземпляра Printer
+    /// Конструктор для создания экземпляра Printer с верхним дисплеем
     /// </summary>
-    /// <param name="printable">Печатаемый объект, используемый в качестве верхнего дисплея</param>
-    /// <param name="controllable">Объект контроллера, осуществляющий ввод данных из консоли</param>
-    /// <param name="isUpdateInput">Значение указывающее на то, стоит ли обновлять дисплей при изменении данных ввода</param>
-    public Printer(IPrintable printable, IControllable<T> controllable, bool isUpdateInput = true) => 
-        (this.upperDisplay, this.controlPanel, this.isUpdateInput) = (printable, controllable, isUpdateInput);
+    /// <param name="upperDisplay">Верхний дисплей</param>
+    public Printer(UpperDisplay upperDisplay) =>
+        this.upperDisplay = upperDisplay;
 
     /// <summary>
-    /// Запускает дисплей и контроллер
+    /// Метод вывода контроллера вместе с верхним дисплеем экземпляра
     /// </summary>
-    /// <returns>Данные контроллера в момент завершения его работы</returns>
-    public async Task<T> ShowAsync()
+    /// <typeparam name="T">Тип возвращаемых данных контроллером</typeparam>
+    /// <param name="controlPanel">Контроллер ввода</param>
+    /// <param name="isUpdateInput">Необходимость обновлять дисплей при изменении значения контроллера</param>
+    /// <returns>Значение, введённое пользователем в контроллер</returns>
+    public async Task<T> ShowAsync<T>(IControllable<T> controlPanel, bool isUpdateInput = true) =>
+        await ShowAsync(controlPanel, isUpdateInput, upperDisplay);
+
+    /// <summary>
+    /// Метод вывода контроллера
+    /// </summary>
+    /// <typeparam name="T">Тип возвращаемых данных контроллером</typeparam>
+    /// <param name="controlPanel">Контроллер ввода</param>
+    /// <param name="isUpdateInput">Необходимость обновлять дисплей при изменении значения контроллера</param>
+    /// <param name="upperDisplay">Ве</param>
+    /// <returns>Значение, введённое пользователем в контроллер</returns>
+    public static async Task<T> ShowAsync<T>(IControllable<T> controlPanel, bool isUpdateInput = true, UpperDisplay? upperDisplay = null)
     {
-        if (Console.InputEncoding != Encoding.Unicode || Console.OutputEncoding != Encoding.Unicode)
-        {
-            Console.OutputEncoding = Encoding.Unicode;
-            Console.InputEncoding = Encoding.Unicode;
-        }
-
-#if WINDOWS
-        if (Console.CursorVisible == true)
-            Console.CursorVisible = false;
-#endif
+        SetupUnicode();
 
         Task startControl = new(controlPanel.StartControl);
         startControl.Start();
-
-        await Task.WhenAll(StartPrintPanelsAsync(), startControl);
+        await Task.WhenAll(StartPrintPanelsAsync(controlPanel, isUpdateInput, upperDisplay), startControl);
 
         return controlPanel.ControlValue;
-    }
 
-    // Метод печати верхнего дисплея и контроллера, обновляющий дисплей при изменении размера консоли или значения контроллера
-    private async Task StartPrintPanelsAsync()
-    {
-        int consoleSize = Console.WindowWidth;
-        T controlValue = controlPanel.ControlValue;
-
-        PrintAllPanels();
-
-        while (!controlPanel.IsExit)
+        // Локальная функция установки юникодовской кодировки в консоли
+        static void SetupUnicode()
         {
-            if (Console.WindowWidth != consoleSize || IsChangedControlValue(controlValue))
+            if (Console.InputEncoding != Encoding.Unicode || Console.OutputEncoding != Encoding.Unicode)
             {
-                PrintAllPanels();
-
-                consoleSize = Console.WindowWidth;
-                controlValue = controlPanel.ControlValue;
-            }   
-
-            await Task.Delay(200);
+                Console.OutputEncoding = Encoding.Unicode;
+                Console.InputEncoding = Encoding.Unicode;
+            }
         }
-    }
 
-    // Метод печати верхнего дисплея вместе с контроллером ввода данных
-    private void PrintAllPanels()
-    {
-        Console.Clear();
+        // Локальная функция печати верхнего дисплея и контроллера, обновляющий печать при изменении размера консоли или значения контроллера
+        static async Task StartPrintPanelsAsync(IControllable<T> controlPanel, bool isUpdateInput, UpperDisplay? upperDisplay)
+        {
+            int consoleSize = Console.WindowWidth;
+            T controlValue = controlPanel.ControlValue;
 
-        upperDisplay.Print();
-        Console.Write('\n');
-        controlPanel.Print();
-    }
+            PrintAllPanels(controlPanel, upperDisplay);
 
-    // Возвращает значение, требуется ли обновить дисплей в связи с изменениями данных контроллера
-    private bool IsChangedControlValue(T controlValue)
-    {
-        if (isUpdateInput)
-            return !controlPanel.ControlValue!.Equals(controlValue);
+            while (!controlPanel.IsExit)
+            {
+                if (Console.WindowWidth != consoleSize || IsChangedControlValue(controlPanel, controlValue, isUpdateInput))
+                {
+                    PrintAllPanels(controlPanel, upperDisplay);
 
-        return false;
+                    consoleSize = Console.WindowWidth;
+                    controlValue = controlPanel.ControlValue;
+                }
+
+                await Task.Delay(50);
+            }
+        }
+
+        // Локальная функция печати верхнего дисплея вместе с контроллером ввода данных
+        static void PrintAllPanels(IControllable<T> controlPanel, UpperDisplay? upperDisplay)
+        {
+            Console.Clear();
+#if WINDOWS
+            if (Console.CursorVisible == true)
+                Console.CursorVisible = false;
+#endif
+
+            if (upperDisplay != null)
+            {
+                upperDisplay.Print();
+                Console.Write('\n');
+            }
+
+            controlPanel.Print();
+        }
+
+        // Возвращает значение, требуется ли обновить дисплей в связи с изменениями данных контроллера
+        static bool IsChangedControlValue(IControllable<T> controlPanel, T controlValue, bool isUpdateInput)
+        {
+            if (isUpdateInput)
+                return !controlPanel.ControlValue!.Equals(controlValue);
+
+            return false;
+        }
     }
 }

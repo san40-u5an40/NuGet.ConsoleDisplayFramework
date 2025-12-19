@@ -5,56 +5,36 @@
 /// </summary>
 public class ControllerMenu : IControllable<int>
 {
-    private string? menuMessage = null;
+    private string? menuMessage;
     private bool isExit = false;
 
-    private Dictionary<int, string> menuItems;
-    private int currentMenuItem;
+    private List<string> items = new();
+    private int currentValue = 1;
 
     /// <summary>
-    /// Создание экземпляра контроллера
+    /// Создание контроллера меню
     /// </summary>
-    /// <param name="menuItems">Коллекция пунктов меню</param>
-    /// <param name="startItemValue">Начальное значение меню</param>
     /// <param name="menuMessage">Подпись меню</param>
-    /// <exception cref="ArgumentException">
-    /// Ошибка переданной коллекции пунктов меню:<br>
-    ///  - Указана пустая коллекция<br>
-    ///  - Коллекция не содержит указанное стартовое значение<br>
-    ///  - Коллекция должна быть непрерывной
-    /// </exception>
-    public ControllerMenu(Dictionary<int, string> menuItems, int startItemValue, string? menuMessage = null)
-    {
-        var result = IsValid(menuItems, startItemValue);
-        if (!result.IsValid)
-            throw new ArgumentException(result.ErrorMessage);
-
+    public ControllerMenu(string? menuMessage = null) =>
         this.menuMessage = menuMessage;
-        this.menuItems = menuItems;
-        currentMenuItem = startItemValue;
 
-        // Локальная функция проверки переданной коллекции на валидность
-        static (bool IsValid, string? ErrorMessage) IsValid(Dictionary<int, string> menuItems, int startItemValue)
+    /// <summary>
+    /// Стартовое значение меню
+    /// </summary>
+    public int StartValue
+    {
+        get => field;
+        set
         {
-            if (menuItems.Count == 0)
-                return (false, "Для составления меню необходимо передать непустую коллекцию!");
-
-            if (!menuItems.ContainsKey(startItemValue))
-                return (false, "Необходимо указать стартовое значение меню, которое в нём содержится!");
-
-            menuItems = menuItems
-                .OrderBy(p => p.Key)
-                .ToDictionary();
-
-            int minKey = menuItems.MinBy(p => p.Key).Key;
-            int maxKey = menuItems.MaxBy(p => p.Key).Key;
-
-            if (maxKey - minKey + 1 != menuItems.Count)
-                return (false, "Необходимо указать коллекцию с непрерывно возрастающей последовательностью чисел!");
-
-            return (true, null);
+            field = value;
+            currentValue = value;
         }
-    }
+    } = 1;
+
+    /// <summary>
+    /// Цвет выделенного пункта меню
+    /// </summary>
+    public ConsoleColor CurrentValueColor { get; set; } = ConsoleColor.DarkRed;
 
     /// <summary>
     /// Значение отражающее прекратил ли свою работу контроллер
@@ -64,13 +44,25 @@ public class ControllerMenu : IControllable<int>
     /// <summary>
     /// Значение, хранимое контроллером
     /// </summary>
-    public int ControlValue => currentMenuItem;
+    public int ControlValue => currentValue;
 
     /// <summary>
-    /// Вывод контроллера в консоль
+    /// Добавление пункта меню
     /// </summary>
-    public void Print()
+    /// <param name="itemDescription">Значение пункта меню</param>
+    /// <returns>Экземпляр класса (builder-паттерн)</returns>
+    public ControllerMenu AddItem(string itemDescription)
     {
+        items.Add(itemDescription);
+        return this;
+    }
+
+    // Метод вывода данных контроллера в консоль
+    void IPrintable.Print()
+    {
+        if (items.Count == 0)
+            return;
+
         if (!IsValidConsoleWidth())
         {
             Console.WriteLine("Увеличьте консольное окно для просмотра меню!");
@@ -80,20 +72,22 @@ public class ControllerMenu : IControllable<int>
         if (menuMessage != null)
             Console.WriteLine(menuMessage);
 
-        foreach (var item in menuItems)
+        for (int i = 0; i < items.Count; i++)
         {
-            if (item.Key == currentMenuItem)
-                Console.WriteColor(item.Key + ") " + item.Value + " ←\n", ConsoleColor.DarkRed);
+            int position = StartValue + i;
+
+            if (position == currentValue)
+                Console.WriteColor(position + ") " + items[i] + " ←\n", CurrentValueColor);
             else
-                Console.WriteLine(item.Key + ") " + item.Value);
+                Console.WriteLine(position + ") " + items[i]);
         }
     }
 
     // Проверка размера консольного окна на валидность
     private bool IsValidConsoleWidth()
     {
-        int displaySpace = 6;
-        int maxLength = menuItems.MaxBy(p => p.Value.Length).Value.Length + displaySpace;
+        int displaySpace = 5;
+        int maxLength = items.MaxBy(p => p.Length)!.Length + displaySpace;
 
         if (Console.WindowWidth < maxLength)
             return false;
@@ -101,10 +95,8 @@ public class ControllerMenu : IControllable<int>
         return true;
     }
 
-    /// <summary>
-    /// Метод, запускающий ввод данных контроллером
-    /// </summary>
-    public void StartControl()
+    // Метод управления контроллером из консоли
+    void IControllable<int>.StartControl()
     {
         isExit = false;
 
@@ -123,10 +115,10 @@ public class ControllerMenu : IControllable<int>
     // Метод смены корректного пункта меню
     private void ChangeItem(ConsoleKey key)
     {
-        if (key == ConsoleKey.UpArrow && menuItems.ContainsKey(currentMenuItem - 1))
-            currentMenuItem--;
+        if (key == ConsoleKey.UpArrow && currentValue > StartValue)
+            currentValue--;
 
-        if (key == ConsoleKey.DownArrow && menuItems.ContainsKey(currentMenuItem + 1))
-            currentMenuItem++;
+        if (key == ConsoleKey.DownArrow && currentValue < StartValue + items.Count - 1)
+            currentValue++;
     }
 }

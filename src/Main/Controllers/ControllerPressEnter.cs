@@ -5,7 +5,7 @@
 /// </summary>
 public class ControllerPressEnter : IControllable<bool>
 {
-    private string? menuMessage = null;
+    private string menuMessage;
     private bool isExit = false;
 
     /// <summary>
@@ -16,7 +16,7 @@ public class ControllerPressEnter : IControllable<bool>
     /// Например <example>"Нажмите [enter] для продолжения: "</example>
     /// </param>
     public ControllerPressEnter(string? menuMessage = null) =>
-        this.menuMessage = menuMessage ?? "Нажмите [enter] для продолжения: ";
+        this.menuMessage = menuMessage ?? "Нажмите [enter] для продолжения...";
 
     /// <summary>
     /// Значение отражающее прекратил ли свою работу контроллер
@@ -28,16 +28,12 @@ public class ControllerPressEnter : IControllable<bool>
     /// </summary>
     public bool ControlValue => true;
 
-    /// <summary>
-    /// Вывод контроллера в консоль
-    /// </summary>
-    public void Print() =>
-        Console.WriteLine(menuMessage);
+    // Метод вывода данных контроллера в консоль
+    void IPrintable.Print() =>
+        Console.Write(menuMessage);
 
-    /// <summary>
-    /// Метод, запускающий ввод данных контроллером
-    /// </summary>
-    public void StartControl()
+    // Метод управления контроллером из консоли
+    void IControllable<bool>.StartControl()
     {
         isExit = false;
 
