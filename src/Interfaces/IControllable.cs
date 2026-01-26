@@ -4,7 +4,7 @@
 /// Интерфейс, определяющий требуемое поведение контроллера дисплея
 /// </summary>
 /// <typeparam name="T">Тип возвращаемых данных контроллером</typeparam>
-public interface IControllable<T> : IPrintable
+public interface IControllable<out T> : IPrintable
 {
     public void StartControl();
     public bool IsExit { get; }
