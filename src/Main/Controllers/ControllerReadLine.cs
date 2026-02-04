@@ -31,7 +31,7 @@ public class ControllerReadLine : IControllable<string>
     /// <summary>
     /// Значение, хранимое контроллером
     /// </summary>
-    public string ControlValue => new string(currentInput);
+    public string ControlValue => new string(currentInput).Replace("\0", string.Empty);
 
     // Метод вывода данных контроллера в консоль
     void IPrintable.Print() =>
