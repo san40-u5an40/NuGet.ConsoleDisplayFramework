@@ -4,6 +4,7 @@
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>disable</ImplicitUsings>
     <Nullable>enable</Nullable>
+	  
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <PackageId>san40_u5an40.$(AssemblyName)</PackageId>
     <Title>Console Display Framework</Title>
@@ -13,9 +14,17 @@
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/san40-u5an40/NuGet.ConsoleDisplayFramework</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/san40-u5an40/NuGet.ConsoleDisplayFramework</PackageProjectUrl>
     <PackageOutputPath>..\..\_Releases</PackageOutputPath>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <Version>2.0.2</Version>
+    <Version>2.0.3</Version>
+
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <IncludeSymbols>true</IncludeSymbols>
+    <IncludeSource>true</IncludeSource>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <Deterministic>true</Deterministic>
   </PropertyGroup>
 	
   <PropertyGroup Condition="'$(OS)' == 'Windows_NT'">
