@@ -12,27 +12,26 @@
     <Description>Framework for fast creation of console display</Description>
     <PackageIcon>icon.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PackageTags>console;консоль;display;дисплей;framework;ui;графический интерфейс;terminal</PackageTags>
+    <PackageTags>console;консоль;display;дисплей;framework;ui;графический;интерфейс;terminal</PackageTags>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/san40-u5an40/NuGet.ConsoleDisplayFramework</RepositoryUrl>
     <PackageProjectUrl>https://github.com/san40-u5an40/NuGet.ConsoleDisplayFramework</PackageProjectUrl>
     <PackageOutputPath>..\..\_Releases</PackageOutputPath>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <Version>2.0.5</Version>
-
+    <Version>2.0.6</Version>
+    <AssemblyVersion>2.0.6.0</AssemblyVersion>
+    <FileVersion>2.0.6.0</FileVersion>
+	  
     <Deterministic>true</Deterministic>
     <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
-    <PathMap>$(MSBuildProjectDirectory)=./</PathMap>
+    <PathMap>$(MSBuildProjectDirectory)=_</PathMap>
+    <LangVersion>latest</LangVersion>
 	  
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <EmbedAllSources>true</EmbedAllSources>
 	  
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-  </PropertyGroup>
-	
-  <PropertyGroup Condition="'$(OS)' == 'Windows_NT'">
-    <DefineConstants>WINDOWS</DefineConstants>
   </PropertyGroup>
 	
   <ItemGroup>

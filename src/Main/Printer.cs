@@ -78,10 +78,9 @@ public class Printer
         static void PrintAllPanels(IControllable<T> controlPanel, UpperDisplay? upperDisplay)
         {
             Console.Clear();
-#if WINDOWS
-            if (Console.CursorVisible == true)
-                Console.CursorVisible = false;
-#endif
+
+            if (OperatingSystem.IsWindows() && Console.CursorVisible == true)
+                    Console.CursorVisible = false;
 
             if (upperDisplay != null)
             {
