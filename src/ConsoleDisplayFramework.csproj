@@ -1,57 +1,65 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+	
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<ImplicitUsings>disable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<NoWarn>$(NoWarn);1591</NoWarn>
 
-  <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework>
-    <ImplicitUsings>disable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-	  
-    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <PackageId>san40_u5an40.$(AssemblyName)</PackageId>
-    <Title>Console Display Framework</Title>
-    <Authors>san40_u5an40</Authors>
-    <Description>Framework for fast creation of console display</Description>
-    <PackageIcon>icon.png</PackageIcon>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PackageTags>console;консоль;display;дисплей;framework;ui;графический;интерфейс;terminal</PackageTags>
-    <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://github.com/san40-u5an40/NuGet.ConsoleDisplayFramework</RepositoryUrl>
-    <PackageProjectUrl>https://github.com/san40-u5an40/NuGet.ConsoleDisplayFramework</PackageProjectUrl>
-    <PackageOutputPath>..\..\_Releases</PackageOutputPath>
-    <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <Version>2.0.6</Version>
-    <AssemblyVersion>2.0.6.0</AssemblyVersion>
-    <FileVersion>2.0.6.0</FileVersion>
-	  
-    <Deterministic>true</Deterministic>
-    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
-    <PathMap>$(MSBuildProjectDirectory)=_</PathMap>
-    <LangVersion>latest</LangVersion>
-	  
-    <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <EmbedAllSources>true</EmbedAllSources>
-	  
-    <IncludeSymbols>true</IncludeSymbols>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-  </PropertyGroup>
-	
-  <ItemGroup>
-    <None Include="..\icons\icon.png">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
-    <None Include="..\LICENSE">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
-    <None Include="..\README.md">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
-  </ItemGroup>
-	
-  <ItemGroup>
-    <PackageReference Include="san40_u5an40.ExtraLib" Version="1.2.0" />
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
-  </ItemGroup>
+		<AssemblyVersion>2.0.7.0</AssemblyVersion>
+		<FileVersion>2.0.7.0</FileVersion>
+		<Version>2.0.7</Version>
+		<PackageReleaseNotes>
+			- Оптимизирован Nuget Health
+			- Добавлена поддержка подсказок с помощью IntelliSense
+			- Добавлены PackageReleaseNotes
+		</PackageReleaseNotes>
+
+		<Title>Console Display Framework</Title>
+		<Description>Framework for fast creation of console display</Description>
+		<Authors>san40_u5an40</Authors>
+
+		<IsPackable>true</IsPackable>
+		<PackageId>san40_u5an40.$(AssemblyName)</PackageId>
+		<PackageTags>console;консоль;display;дисплей;framework;ui;интерфейс;terminal</PackageTags>
+		<PackageIcon>icon.png</PackageIcon>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageOutputPath>..\..\_Releases</PackageOutputPath>
+		<RepositoryUrl>https://github.com/san40-u5an40/NuGet.ConsoleDisplayFramework</RepositoryUrl>
+		<PackageProjectUrl>https://github.com/san40-u5an40/NuGet.ConsoleDisplayFramework</PackageProjectUrl>
+		<RepositoryType>git</RepositoryType>
+
+		<PublishRepositoryUrl>true</PublishRepositoryUrl>
+		<EmbedAllSources>true</EmbedAllSources>
+		<EmbedUntrackedSources>true</EmbedUntrackedSources>
+
+		<Deterministic>true</Deterministic>
+		<ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+		<DeterministicSourcePaths>true</DeterministicSourcePaths>
+		<UseHostCompilerIfAvailable>false</UseHostCompilerIfAvailable>
+
+		<DebugSymbols>true</DebugSymbols>
+		<DebugType>portable</DebugType>
+		<PublishWindowsPdb>false</PublishWindowsPdb>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="..\icons\icon.png">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+		<None Include="..\README.md">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="san40_u5an40.ExtraLib" Version="4.2.0" />
+		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
+	</ItemGroup>
 
 </Project>
