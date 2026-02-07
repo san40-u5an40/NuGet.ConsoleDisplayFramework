@@ -12,7 +12,7 @@ public class ControllerPressEnter : IControllable<bool>
     /// Создание экземпляра контроллера
     /// </summary>
     /// <param name="menuMessage">
-    /// Подпись для ввода данных<br>
+    /// Подпись для ввода данных\
     /// Например <example>"Нажмите [enter] для продолжения: "</example>
     /// </param>
     public ControllerPressEnter(string? menuMessage = null) =>

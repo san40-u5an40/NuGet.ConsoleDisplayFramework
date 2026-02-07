@@ -7,13 +7,11 @@
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<NoWarn>$(NoWarn);1591</NoWarn>
 
-		<AssemblyVersion>2.0.7.0</AssemblyVersion>
-		<FileVersion>2.0.7.0</FileVersion>
-		<Version>2.0.7</Version>
+		<AssemblyVersion>2.0.8.0</AssemblyVersion>
+		<FileVersion>2.0.8.0</FileVersion>
+		<Version>2.0.8</Version>
 		<PackageReleaseNotes>
-			- Оптимизирован Nuget Health
-			- Добавлена поддержка подсказок с помощью IntelliSense
-			- Добавлены PackageReleaseNotes
+			Исправлены подсказки для IntelliSense
 		</PackageReleaseNotes>
 
 		<Title>Console Display Framework</Title>

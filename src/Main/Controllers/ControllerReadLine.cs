@@ -16,10 +16,10 @@ public class ControllerReadLine : IControllable<string>
     /// Создание экземпляра контроллера
     /// </summary>
     /// <param name="message">
-    /// Подпись для ввода данных<br>
+    /// Подпись для ввода данных\
     /// Например <example>"Введите данные: "</example>
     /// </param>
-    /// <param name="isShowText">Индикатор того, необходимо ли отображать вводимые данные</param>
+    /// <param name="isShowInput">Индикатор того, необходимо ли отображать вводимые данные</param>
     public ControllerReadLine(string? message = null, bool isShowInput = false) =>
         (this.menuMessage, this.isShowText) = (message ?? "Введите данные: ", isShowInput);
 
